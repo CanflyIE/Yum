@@ -17,25 +17,21 @@ public class MainPleine {
         boolean paire = false;
         boolean brelan = false;
 
-        for (int i=0;i<array.length;i++) {
-            int n = array[i];
+        for (int n : array) {
             int r = 0;
             // On compte le nombre de récurrences de n
             for (int k : array) {
-                if (n == k) {
+                if (n == k)
                     r++;
-                }
             }
 
-            if (r == 2) {
+            if (r == 2)
                 paire = true;
-            } else if (r == 3) {
+            else if (r == 3)
                 brelan = true;
-            }
 
-            if (paire && brelan) {
+            if (paire && brelan)
                 return true;
-            }
         }
 
         return false;
