@@ -1,21 +1,22 @@
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /*
- * Programme principal qui démarre le jeu de YUM pour un seul joueur.
+ * Programme principal qui dï¿½marre le jeu de YUM pour un seul joueur.
  * 
- * Une série de 5 dés est généré aléatoirement et le joueur a droit
- * a changer les dés qu'il désire à deux reprises à moins qu'il les
+ * Une sï¿½rie de 5 dï¿½s est gï¿½nï¿½rï¿½ alï¿½atoirement et le joueur a droit
+ * a changer les dï¿½s qu'il dï¿½sire ï¿½ deux reprises ï¿½ moins qu'il les
  * garde tous.
  * 
- * Par la suite, le programme offre toutes les possibilités de points 
- * pouvant être joués et le joueur décide quel est son choix parmi 
- * ces possibilités.
+ * Par la suite, le programme offre toutes les possibilitï¿½s de points 
+ * pouvant ï¿½tre jouï¿½s et le joueur dï¿½cide quel est son choix parmi 
+ * ces possibilitï¿½s.
  * 
- * Dans le cadre du cours inf111 (voir énnoncé fourni).
+ * Dans le cadre du cours inf111 (voir ï¿½nnoncï¿½ fourni).
  * 
  * Auteur : Mettez le nom de chaque membre du groupe qui a suffisamment 
- *          contribué en écriture de code et de commentaires.
+ *          contribuï¿½ en ï¿½criture de code et de commentaires.
  *          
  * Auteur :
  * Auteur :
@@ -24,7 +25,7 @@ import java.util.Scanner;
  * Auteur :
  * 
  * 
- * Auteur : Pierre Bélisle
+ * Auteur : Pierre Bï¿½lisle
  *          
  * Version : Copyright A2021
  */
@@ -32,25 +33,136 @@ import java.util.Scanner;
 public class YumVsEtud {
 
 	
-	// Les constantes sont définies dans le module Constantes.java
-	// Si vous en ajoutez, faîtes-le ici.
-	
-	
-	// Permet la saisie de donnée au clavier en mode console.
+	// Les constantes sont dï¿½finies dans le module Constantes.java
+	// Si vous en ajoutez, faï¿½tes-le ici.
+
+
+	// Permet la saisie de donnÃ©e au clavier en mode console.
 	public static Scanner clavier = new Scanner(System.in);
 
 	public static void main(String[] args){
 
-	    /* Traduisez ici l'algorithme du programme principal
-	     * décrit dans l'énoncé et commenter votre code au fur et à mesure.
-	     */
-	    
-	    System.out.print("Merci d'avoir joue au YUM avec nous");
+
+
+		int[] tableDesDe  = new int[Constantes.NB_DES];
+		double[] tableBoolPointage;
+		int[][] tableScorePointage;
+		HashMap<Integer, int[]> tableDesDeFinal = new HashMap<Integer, int[]>();
+
+
+		for ( int nombreDeToursJouer=0; nombreDeToursJouer < Constantes.NB_TOURS ; nombreDeToursJouer++ ){
+			System.out.println("nouveau tour");
+			int nbrDeLancer = 0;
+			tableDesDeFinal.clear();
+			boolean pasDeRelance = false;
+
+			init(tableDesDe);
+			ModAffichage.afficherDes(tableDesDe);
+			tableDesDeFinal.put(nbrDeLancer,tableDesDe);
+
+			while ( nbrDeLancer < 3 || pasDeRelance == false ){
+
+			int[] table = testInput();
+
+			if(table == null){
+
+				System.out.println("vous avez fini le tour");
+				pasDeRelance = true;
+			}else {
+
+				tableDesDe = nouveauTableau(tableDesDe, table);
+				ModAffichage.afficherDes(tableDesDe);
+				tableDesDeFinal.put(nbrDeLancer, tableDesDe);
+				nbrDeLancer++;
+			}
+			}
+
+
+		}
+
 	}
-	
+
 	/*
-	 * Écrivez TOUS vos sous-programmes ici.  Il y en a entre 15 et 20.
+	 * Ã‰crivez TOUS vos sous-programmes ici.  Il y en a entre 15 et 20.
 	 */
-	
- 
+
+	// Inialiser
+	public static int[] init( int[] tableDesDe){
+		for ( int i =0; i< Constantes.NB_DES;i++){
+			tableDesDe[i] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
+		}
+		return tableDesDe;
+	}
+
+	// permet de tester si l'input est bien un input et qu'il est composÃ© seulement de chiffre entre 1 et 6
+	public static int[] testInput( ){
+		boolean test = true;
+		int input = 0;
+		int[] inputAModifier = new int[5];
+
+		while(test) {
+			try {
+
+				input = clavier.nextInt();
+
+				if(input == 0){
+					return null;
+				}
+
+				int i = 0 ;
+				boolean bool = false;
+
+				while( input%10 !=0 && !bool ) {
+
+					if( 0<(input%10) && (input%10)<6) {
+						inputAModifier[i] = input % 10;
+						input = input / 10;
+						i++;
+					}
+					else{
+						bool= true;
+					}
+				}
+
+				if(!bool && !verifLesDoublons(inputAModifier)  ){
+					break;
+
+				}
+
+			} catch (Exception e) {
+				System.out.println("Il faut entrer un nombre entre 1 et 5");
+
+			}
+		}
+		return inputAModifier ;
+	}
+
+	// Remplace les dÃ©s sÃ©lÃ©ctionner par le joueur
+	public static int[] nouveauTableau(int[] ancienneTable , int[] valeurAChanger){
+		for (int i: valeurAChanger ) { if ( i!=0 ){
+			ancienneTable[i-1] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1)); }
+		}
+		return ancienneTable;
+	}
+
+	// Verifie qu'il y a pas de doublons dans le chiffre entrÃ© par l'utilisateur
+	public static boolean verifLesDoublons(int[] n){
+		for (int i: n) {
+			if( i !=0 ) {
+				int nbrDeDoublon = 0;
+				for (int y : n) {
+					if (i == y) {
+						nbrDeDoublon++;
+					}
+				}
+				if (nbrDeDoublon > 1) {
+					return true;
+
+				}
+			}
+		}
+		return false;
+	}
+
+
 }
