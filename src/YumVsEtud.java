@@ -47,18 +47,15 @@ public class YumVsEtud {
 		int[] tableDesDe  = new int[Constantes.NB_DES];
 		double[] tableBoolPointage;
 		int[][] tableScorePointage;
-		HashMap<Integer, int[]> tableDesDeFinal = new HashMap<Integer, int[]>();
 
 
 		for ( int nombreDeToursJouer=0; nombreDeToursJouer < Constantes.NB_TOURS ; nombreDeToursJouer++ ){
 			System.out.println("nouveau tour");
 			int nbrDeLancer = 0;
-			tableDesDeFinal.clear();
 			boolean pasDeRelance = false;
 
 			init(tableDesDe);
 			ModAffichage.afficherDes(tableDesDe);
-			tableDesDeFinal.put(nbrDeLancer,tableDesDe);
 
 			while ( nbrDeLancer < 3 || pasDeRelance == false ){
 
@@ -67,14 +64,14 @@ public class YumVsEtud {
 			if(table == null){
 
 				System.out.println("vous avez fini le tour");
-				pasDeRelance = true;
+				break;
+
 			}else {
 
 				tableDesDe = nouveauTableau(tableDesDe, table);
 				ModAffichage.afficherDes(tableDesDe);
-				tableDesDeFinal.put(nbrDeLancer, tableDesDe);
 				nbrDeLancer++;
-			}
+				}
 			}
 
 
