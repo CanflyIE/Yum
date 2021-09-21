@@ -4,31 +4,28 @@ public class Occurence {
 
 	public static void main(String args[]) {
 
-		int tab []= {1,2,3,4,4};
-		int resultat=recurence(tab);
-		System.out.println(resultat + " fois");
+		int tab []= {4,6,6,4,4};
+		int []resultat=recurence(tab);
+		for(int i : resultat) {
+			System.out.println(i + " fois");	
+		}
+		
 	}
 
-	public static int recurence(int tab[]) {
-		boolean flag=true;
+	public static int [] recurence(int tab[]) {
 		int compteur=0;
-		int valeurRecuperer=0;
-
-		for (int i=0; i<tab.length-1;i++) {
-
-			if(tab[i]==tab[i+1]) {
-				valeurRecuperer=tab[i];
-				compteur++;
-				flag=false;
-			}
-		}
-		if(flag==false) {
-			compteur++;
-			System.out.println("j'ai cette valeur duplique : "+ valeurRecuperer);
-		}
-		else 
+		int []tableauVerification= new int [6]; 
+		for (int i=1; i<tab.length+2;i++) {
 			compteur=0;
-		return compteur;
+			System.out.print(i);
+			for(int x=0; x< tab.length; x++) {
+				if(i==tab[x]) {
+					compteur++;	
+				}		
+			}
+			tableauVerification[i-1]=compteur;
+		}
+		return tableauVerification;
 	}
 
 }
