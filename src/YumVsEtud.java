@@ -1,5 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /*
@@ -36,130 +35,124 @@ public class YumVsEtud {
 	// Les constantes sont d�finies dans le module Constantes.java
 	// Si vous en ajoutez, fa�tes-le ici.
 
-
 	// Permet la saisie de donnée au clavier en mode console.
-	public static Scanner clavier = new Scanner(System.in);
+	public static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args){
 
-
-
-		int[] tableDesDe  = new int[Constantes.NB_DES];
+		int[] tableDes  = new int[Constantes.NB_DES];
 		double[] tableBoolPointage;
 		int[][] tableScorePointage;
 
+		// Boucle qui demande à l'utilisateur les dés qu'il souhaite relancer
+		for ( int nbTours=0; nbTours<Constantes.NB_TOURS; nbTours++ ) {
+			System.out.println("TOUR " + nbTours);
+			int nbLancers = 0;
 
-		for ( int nombreDeToursJouer=0; nombreDeToursJouer < Constantes.NB_TOURS ; nombreDeToursJouer++ ){
-			System.out.println("nouveau tour");
-			int nbrDeLancer = 0;
-			boolean pasDeRelance = false;
+			initTableDes(tableDes); // Lance les dés une première fois
+			ModAffichage.afficherDes(tableDes);
 
-			init(tableDesDe);
-			ModAffichage.afficherDes(tableDesDe);
+			// Le joueur a le droit à 3 lancers
+			while (nbLancers < 3) {
+				int[] tableDesARelancer = obtenirTableDesARelancer();
 
-			while ( nbrDeLancer < 3 || pasDeRelance == false ){
+				if (tableDesARelancer == null) {
+					break;
 
-			int[] table = testInput();
-
-			if(table == null){
-
-				System.out.println("vous avez fini le tour");
-				break;
-
-			}else {
-
-				tableDesDe = nouveauTableau(tableDesDe, table);
-				ModAffichage.afficherDes(tableDesDe);
-				nbrDeLancer++;
+				} else {
+					tableDes = relancerDesChoisis(tableDes, tableDesARelancer);
+					ModAffichage.afficherDes(tableDes);
+					nbLancers++;
 				}
 			}
-
+			System.out.println("Tour termine.");
 
 		}
 
 	}
 
 	/*
-	 * Écrivez TOUS vos sous-programmes ici.  Il y en a entre 15 et 20.
+	 * Écrivez TOUS vos sous-programmes ici. Il y en a entre 15 et 20.
 	 */
 
-	// Inialiser
-	public static int[] init( int[] tableDesDe){
-		for ( int i =0; i< Constantes.NB_DES;i++){
+	// Initialise la valeur des dés (action réalisée à chaque début de tour)
+	public static int[] initTableDes(int[] tableDesDe){
+		for (int i=0; i<Constantes.NB_DES; i++){
 			tableDesDe[i] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
 		}
 		return tableDesDe;
 	}
 
-	// permet de tester si l'input est bien un input et qu'il est composé seulement de chiffre entre 1 et 6
-	public static int[] testInput( ){
-		boolean test = true;
-		int input = 0;
-		int[] inputAModifier = new int[5];
+	// Récupère les dés à relancer choisis et vérifie si le choix est valide
+	public static int[] obtenirTableDesARelancer( ){
 
-		while(test) {
-			try {
+		while(true) {
+			int desARelancer = demanderInteger(sc, "Entrez les des a relancer (0 pour garder le lancer actuel) :");
 
-				input = clavier.nextInt();
+			// Si desARelancer est nul, le joueur finit le tour
+			if (desARelancer == 0)
+				return null;
+			else
+				if (verifierChoixDesARelancer(desARelancer))
+					return intToArray(desARelancer);
 
-				if(input == 0){
-					return null;
-				}
-
-				int i = 0 ;
-				boolean bool = false;
-
-				while( input%10 !=0 && !bool ) {
-
-					if( 0<(input%10) && (input%10)<6) {
-						inputAModifier[i] = input % 10;
-						input = input / 10;
-						i++;
-					}
-					else{
-						bool= true;
-					}
-				}
-
-				if(!bool && !verifLesDoublons(inputAModifier)  ){
-					break;
-
-				}
-
-			} catch (Exception e) {
-				System.out.println("Il faut entrer un nombre entre 1 et 5");
-
-			}
+			System.out.println("Choix invalide.");
 		}
-		return inputAModifier ;
 	}
 
-	// Remplace les dés séléctionner par le joueur
-	public static int[] nouveauTableau(int[] ancienneTable , int[] valeurAChanger){
-		for (int i: valeurAChanger ) { if ( i!=0 ){
-			ancienneTable[i-1] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1)); }
-		}
-		return ancienneTable;
+	// Vérifie si le choix de dés à relancer est valide : le choix doit être un integer positif de 5 digits maximum, distincts et compris entre 1 et 5
+	public static boolean verifierChoixDesARelancer(int desARelancer) {
+		int[] tableDesARelancer = intToArray(desARelancer);
+
+		return desARelancer >= 0 && tableDesARelancer.length <= 5 && !tableADoublons(tableDesARelancer) && !tablePossedeValInvalide(tableDesARelancer);
 	}
 
-	// Verifie qu'il y a pas de doublons dans le chiffre entré par l'utilisateur
-	public static boolean verifLesDoublons(int[] n){
-		for (int i: n) {
-			if( i !=0 ) {
-				int nbrDeDoublon = 0;
-				for (int y : n) {
-					if (i == y) {
-						nbrDeDoublon++;
-					}
-				}
-				if (nbrDeDoublon > 1) {
-					return true;
-
-				}
-			}
-		}
+	// Vérifie si un array contient plusieurs fois la même valeur
+	public static boolean tableADoublons(int[] array) {
+		for (int i=1; i<array.length; i++)
+			if (array[i-1] == array[i])
+				return true;
 		return false;
 	}
 
+	// Vérifie sur un array contient un int inférieur à 1 ou supérieur à 5
+	public static boolean tablePossedeValInvalide(int[] array) {
+		for (int e : array)
+			if (e > 5 || e < 1)
+				return true;
+		return false;
+	}
+
+	// Relance les dés choisis par le joueur
+	public static int[] relancerDesChoisis(int[] tableDes, int[] tableDesARelancer){
+		for (int i : tableDesARelancer )
+			if (i!=0)
+				tableDes[i-1] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
+		return tableDes;
+	}
+
+	// Transforme un int en array
+	public static int[] intToArray(int integer) {
+		int[] array = new int[String.valueOf(integer).length()];
+		int i = 0;
+		while (integer > 0) {
+			int n = integer%10;
+			integer = integer/10;
+			array[i] = n;
+			i++;
+		}
+		return array;
+	}
+
+	public static int demanderInteger(Scanner sc, String message) {
+		System.out.println(message);
+		int integer = -1; // -1 est un integer invalide dans le cadre du programme
+		try {
+			integer = sc.nextInt();
+		} catch (Exception e) {
+			sc.nextLine();
+		}
+		return integer;
+	}
 
 }
