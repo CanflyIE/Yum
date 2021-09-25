@@ -45,25 +45,20 @@ public class YumVsEtud {
 		for ( int nbTours=0; nbTours<Constantes.NB_TOURS; nbTours++ ) {
 			System.out.println("TOUR " + nbTours);
 			int nbLancers = 0;
-
 			initTableDes(tableDes); // Lance les dés une première fois
 			ModAffichage.afficherDes(tableDes);
-
 			// Le joueur a le droit à 3 lancers
 			while (nbLancers < 3) {
 				int[] tableDesARelancer = obtenirTableDesARelancer();
-
-				if (tableDesARelancer == null) {
+				if (tableDesARelancer == null)
 					break;
-
-				} else {
+				else {
 					tableDes = relancerDesChoisis(tableDes, tableDesARelancer);
 					ModAffichage.afficherDes(tableDes);
 					nbLancers++;
 				}
 			}
 			System.out.println("Tour termine.");
-
 		}
 
 	}
@@ -78,12 +73,9 @@ public class YumVsEtud {
 	 * @param tableDes tableau d'integer à initialiser
 	 */
 	public static void initTableDes(int[] tableDes){
-		for (int i=0; i<Constantes.NB_DES; i++){
+		for (int i=0; i<Constantes.NB_DES; i++)
 			tableDes[i] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
-		}
 	}
-
-	// Récupère les dés à relancer choisis et vérifie si le choix est valide
 
 	/**
 	 * Demande à l'utilisateur un integer dont chaque chiffre correspond à un dé qu'il souhaite relancer.
@@ -99,8 +91,12 @@ public class YumVsEtud {
 			if (desARelancer == 0)
 				return null;
 			else
-				// Vérifie si le choix de dés à relancer est valide : le choix doit être un integer positif de 5 digits maximum, distincts et compris entre 1 et 5
-				if (desARelancer >= 0 && tableDesARelancer.length <= 5 && !tableADoublons(tableDesARelancer) && !tablePossedeValInvalide(tableDesARelancer))
+				// Vérifie si le choix de dés à relancer est valide : le choix doit être un integer positif de 5 digits
+				// maximum, distincts et compris entre 1 et 5
+				if (desARelancer >= 0
+						&& tableDesARelancer.length <= 5
+						&& !tableADoublons(tableDesARelancer)
+						&& !tablePossedeValInvalide(tableDesARelancer))
 					return tableDesARelancer;
 
 			System.out.println("Choix invalide.");
