@@ -24,10 +24,9 @@ public class MainPleine {
         for (int n : array) {
             int r = 0;
             // On compte le nombre de récurrences de n
-            for (int k : array) {
+            for (int k : array)
                 if (n == k)
                     r++;
-            }
             if (r == 2)
                 paire = true;
             else if (r == 3)

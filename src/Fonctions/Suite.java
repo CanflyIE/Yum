@@ -24,12 +24,9 @@ public class Suite {
         Map<String, Boolean> suites = new HashMap<String, Boolean>();
         Arrays.sort(array);
         int cpt = 0;
-
-        for (int i=1;i<array.length;i++) {
+        for (int i=1;i<array.length;i++)
             if (array[i-1] + 1 == array[i])
                 cpt++;
-        }
-
         if (cpt >= 3)
             suites.put("suite4", true);
         else
