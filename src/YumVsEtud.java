@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /*
@@ -17,12 +16,10 @@ import java.util.Scanner;
  * Auteur : Mettez le nom de chaque membre du groupe qui a suffisamment 
  *          contribu� en �criture de code et de commentaires.
  *          
- * Auteur :
- * Auteur :
- * Auteur :
- * Auteur :
- * Auteur :
- * 
+ * Auteur : Thomas Saudemont
+ * Auteur : Aicha Fadia
+ * Auteur : Ilyes 
+ *
  * 
  * Auteur : Pierre B�lisle
  *          
@@ -75,39 +72,46 @@ public class YumVsEtud {
 	 * Écrivez TOUS vos sous-programmes ici. Il y en a entre 15 et 20.
 	 */
 
-	// Initialise la valeur des dés (action réalisée à chaque début de tour)
-	public static int[] initTableDes(int[] tableDesDe){
+	/**
+	 * Initialise un array de d'integer, représentant les dés, avec des valeurs aléatoires correspondantes au nombre de
+	 * faces du dé.
+	 * @param tableDes tableau d'integer à initialiser
+	 */
+	public static void initTableDes(int[] tableDes){
 		for (int i=0; i<Constantes.NB_DES; i++){
-			tableDesDe[i] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
+			tableDes[i] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
 		}
-		return tableDesDe;
 	}
 
 	// Récupère les dés à relancer choisis et vérifie si le choix est valide
-	public static int[] obtenirTableDesARelancer( ){
 
+	/**
+	 * Demande à l'utilisateur un integer dont chaque chiffre correspond à un dé qu'il souhaite relancer.
+	 * @return un array d'integer correspondant à l'integer entré par l'utilisateur (un chiffre par case de
+	 * l'array) OU null si l'utilisateur ne souhaite pas relancer de dé
+	 */
+	public static int[] obtenirTableDesARelancer( ){
 		while(true) {
 			int desARelancer = demanderInteger(sc, "Entrez les des a relancer (0 pour garder le lancer actuel) :");
+			int[] tableDesARelancer = intToArray(desARelancer);
 
 			// Si desARelancer est nul, le joueur finit le tour
 			if (desARelancer == 0)
 				return null;
 			else
-				if (verifierChoixDesARelancer(desARelancer))
-					return intToArray(desARelancer);
+				// Vérifie si le choix de dés à relancer est valide : le choix doit être un integer positif de 5 digits maximum, distincts et compris entre 1 et 5
+				if (desARelancer >= 0 && tableDesARelancer.length <= 5 && !tableADoublons(tableDesARelancer) && !tablePossedeValInvalide(tableDesARelancer))
+					return tableDesARelancer;
 
 			System.out.println("Choix invalide.");
 		}
 	}
 
-	// Vérifie si le choix de dés à relancer est valide : le choix doit être un integer positif de 5 digits maximum, distincts et compris entre 1 et 5
-	public static boolean verifierChoixDesARelancer(int desARelancer) {
-		int[] tableDesARelancer = intToArray(desARelancer);
-
-		return desARelancer >= 0 && tableDesARelancer.length <= 5 && !tableADoublons(tableDesARelancer) && !tablePossedeValInvalide(tableDesARelancer);
-	}
-
-	// Vérifie si un array contient plusieurs fois la même valeur
+	/**
+	 * Vérifie si un array contient plusieurs fois la même valeur.
+	 * @param array à vérifier
+	 * @return true si l'array a des doublons, sinon false
+	 */
 	public static boolean tableADoublons(int[] array) {
 		for (int i=1; i<array.length; i++)
 			if (array[i-1] == array[i])
@@ -115,7 +119,11 @@ public class YumVsEtud {
 		return false;
 	}
 
-	// Vérifie sur un array contient un int inférieur à 1 ou supérieur à 5
+	/**
+	 * 	Vérifie sur un array contient un int inférieur à un ou supérieur à cinq.
+	 * @param array array à vérifier
+	 * @return true si l'array possède une valeur interdite, sinon false
+	 */
 	public static boolean tablePossedeValInvalide(int[] array) {
 		for (int e : array)
 			if (e > 5 || e < 1)
@@ -123,7 +131,12 @@ public class YumVsEtud {
 		return false;
 	}
 
-	// Relance les dés choisis par le joueur
+	/**
+	 * Attribue, dans un array, une nouvelle valeur aléatoire aux indices spécifiés.
+	 * @param tableDes array à modifier avec de nouvelles valeurs
+	 * @param tableDesARelancer array contenant les indices de l'array à modifier
+	 * @return tableDes modifié
+	 */
 	public static int[] relancerDesChoisis(int[] tableDes, int[] tableDesARelancer){
 		for (int i : tableDesARelancer )
 			if (i!=0)
@@ -131,7 +144,11 @@ public class YumVsEtud {
 		return tableDes;
 	}
 
-	// Transforme un int en array
+	/**
+	 * Convertit un integer en array (un chiffre par case).
+	 * @param integer integer à convertir en array
+	 * @return array
+	 */
 	public static int[] intToArray(int integer) {
 		int[] array = new int[String.valueOf(integer).length()];
 		int i = 0;
@@ -144,6 +161,12 @@ public class YumVsEtud {
 		return array;
 	}
 
+	/**
+	 * Affiche un String puis récupère l'integer entré par l'utilisateur.
+	 * @param sc Scanner
+	 * @param message String à afficher à l'utilisateur
+	 * @return integer entré par l'utilisateur
+	 */
 	public static int demanderInteger(Scanner sc, String message) {
 		System.out.println(message);
 		int integer = -1; // -1 est un integer invalide dans le cadre du programme
