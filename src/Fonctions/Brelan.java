@@ -1,6 +1,6 @@
 package Fonctions;
 
-public class Brelon {
+public class Brelan {
 
 
     public static void main(String[] args) {
