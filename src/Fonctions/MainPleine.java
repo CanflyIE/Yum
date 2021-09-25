@@ -11,9 +11,13 @@ public class MainPleine {
 
     }
 
-    // Procédure qui vérifie si @array comprend une main pleine
+    /**
+     * Vérifie un array contient une main pleine. C'est-à-dire deux valeurs identiques et trois autres valeurs
+     * identiques (une paire et un brelan).
+     * @param array array à vérifier
+     * @return true si array contient une main pleine, sinon false
+     */
     public static boolean isMainPleine(int[] array) {
-        // Une main pleine est composée d'une paire et d'un brelan
         boolean paire = false;
         boolean brelan = false;
 
@@ -24,16 +28,13 @@ public class MainPleine {
                 if (n == k)
                     r++;
             }
-
             if (r == 2)
                 paire = true;
             else if (r == 3)
                 brelan = true;
-
             if (paire && brelan)
                 return true;
         }
-
         return false;
     }
 

@@ -18,7 +18,7 @@ import java.util.Scanner;
  *          
  * Auteur : Thomas Saudemont
  * Auteur : Aicha Fadia
- * Auteur : Ilyes 
+ * Auteur : Ilyes
  *
  * 
  * Auteur : Pierre B�lisle
