@@ -15,6 +15,7 @@ public class YumVsEtudTest {
         Assertions.assertFalse(YumVsEtud.isSuite(tab2).get("suite5"));
         Assertions.assertFalse(YumVsEtud.isSuite(tab3).get("suite4"));
         Assertions.assertFalse(YumVsEtud.isSuite(tab3).get("suite5"));
+        Assertions.assertArrayEquals(tab1, new int[]{2, 1, 4, 3, 5});
     }
 
     @Test
@@ -23,6 +24,7 @@ public class YumVsEtudTest {
         int[] tab2 = {3, 2, 3, 3, 3};
         Assertions.assertTrue(YumVsEtud.isMainPleine(tab1));
         Assertions.assertFalse(YumVsEtud.isMainPleine(tab2));
+        Assertions.assertArrayEquals(tab1, new int[]{3, 2, 3, 2, 3});
     }
 
     @Test
@@ -31,6 +33,7 @@ public class YumVsEtudTest {
         int[] tab2 = {1, 2, 4, 3, 5};
         Assertions.assertTrue(YumVsEtud.tableADoublons(tab1));
         Assertions.assertFalse(YumVsEtud.tableADoublons(tab2));
+        Assertions.assertArrayEquals(tab1, new int[]{1, 2, 4, 3, 4});
     }
 
     @Test
@@ -50,6 +53,7 @@ public class YumVsEtudTest {
         int[] tab2 = {1, 2, 3, 4, 5};
         Assertions.assertTrue(YumVsEtud.tablePossedeValInvalide(tab1));
         Assertions.assertFalse(YumVsEtud.tablePossedeValInvalide(tab2));
+        Assertions.assertArrayEquals(tab1, new int[]{1, 5, 3, 4, 6});
     }
 
     @Test
