@@ -1,5 +1,7 @@
 package Fonctions;
 
+import java.util.Arrays;
+
 public class MainPleine {
 
     public static void main(String[] args){
