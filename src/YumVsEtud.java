@@ -1,7 +1,7 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import Fonctions.GrillePossibilite;
+
+import java.lang.reflect.Array;
+import java.util.*;
 
 /*
  * Programme principal qui d�marre le jeu de YUM pour un seul joueur.
@@ -41,8 +41,12 @@ public class YumVsEtud {
 	public static void main(String[] args){
 
 		int[] tableDes  = new int[Constantes.NB_DES];
-		double[] tableBoolPointage;
-		int[][] tableScorePointage;
+		int[] tablePointage = new int[Constantes.NB_CASES];;
+		int[] feuillePointage = {0,-1,-1,-1,-1,-1,-1,0,0,0,-1,-1,-1,-1,-1,-1,-1,0,0} ;
+
+
+
+
 
 		// Boucle qui demande à l'utilisateur les dés qu'il souhaite relancer
 		for ( int nbTours=0; nbTours<Constantes.NB_TOURS; nbTours++ ) {
@@ -52,16 +56,25 @@ public class YumVsEtud {
 			ModAffichage.afficherDes(tableDes);
 			// Le joueur a le droit à 3 lancers
 			while (nbLancers < 3) {
+
 				int[] tableDesARelancer = obtenirTableDesARelancer();
 				if (tableDesARelancer == null)
-					break;
+					nbLancers = 4;
 				else {
 					tableDes = relancerDesChoisis(tableDes, tableDesARelancer);
 					ModAffichage.afficherDes(tableDes);
 					nbLancers++;
 				}
+
+				tablePointage =  TraitementDePossibilite(tableDes,feuillePointage);
+				ModAffichage.afficherGrillePossibilite(tablePointage);
 			}
-			System.out.println("Tour termine.");
+			int choix =0;
+			while(!verifieLeChoix(choix ,tablePointage )) {
+				 choix = demanderInteger(sc, "(1,6) ou 10 = Brelon , 11 = carre , 12 = Main pleine , 13 = Petite , 14 = Grosse, 15 = surplus , 16 Yum ");
+			}
+			feuillePointage = updateArrayScore(choix,tablePointage[choix],feuillePointage);
+			ModAffichage.afficherGrille(feuillePointage);
 		}
 
 	}
@@ -79,6 +92,22 @@ public class YumVsEtud {
 		for (int i=0; i<Constantes.NB_DES; i++)
 			tableDes[i] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
 	}
+
+
+	public static boolean verifieLeChoix(int choix , int[] tableauPossiblite){
+
+		List<Integer> choixPossible = new ArrayList<>();
+
+		for (int i=0; i<tableauPossiblite.length;i++){
+			if (tableauPossiblite[i] !=0){
+				choixPossible.add(i);
+			}
+		}
+
+		return choixPossible.contains(choix) ;
+
+	}
+
 
 	/**
 	 * Demande à l'utilisateur un integer dont chaque chiffre correspond à un dé qu'il souhaite relancer.
@@ -112,9 +141,12 @@ public class YumVsEtud {
 	 * @return true si l'array a des doublons, sinon false
 	 */
 	public static boolean tableADoublons(int[] array) {
-		Arrays.sort(array);
-		for (int i=1; i<array.length; i++)
-			if (array[i-1] == array[i])
+
+		int[] tempArray = Arrays.copyOf(array,array.length);
+		Arrays.sort(tempArray);
+
+		for (int i=1; i<tempArray.length; i++)
+			if (tempArray[i-1] == tempArray[i])
 				return true;
 		return false;
 	}
@@ -212,10 +244,13 @@ public class YumVsEtud {
 	 */
 	public static Map<String, Boolean> isSuite(int[] array) {
 		Map<String, Boolean> suites = new HashMap<String, Boolean>();
-		Arrays.sort(array);
+
+		int [] tempArray = Arrays.copyOf(array,array.length);
+		Arrays.sort(tempArray);
 		int cpt = 0;
-		for (int i=1;i<array.length;i++)
-			if (array[i-1] + 1 == array[i])
+
+		for (int i=1;i<tempArray.length;i++)
+			if (tempArray[i-1] + 1 == tempArray[i])
 				cpt++;
 		if (cpt >= 3)
 			suites.put("suite4", true);
@@ -227,6 +262,153 @@ public class YumVsEtud {
 			suites.put("suite5", false);
 
 		return suites;
+	}
+
+
+
+	/**
+	 *
+	 * @param tableauDes
+	 * @return
+	 * @author Aicha Berthe Ilyes Essid
+	 */
+
+	public static int  [] TraitementDePossibilite(int []tableauDes, int []tableauVerification ) {
+
+		boolean main =isMainPleine(tableauDes);
+
+		Map<String, Boolean> res = isSuite(tableauDes);
+
+		int []tableau = Occurrence(tableauDes);
+
+		int []tableauPossibilite= new int [19];
+		for(int i=0; i<tableau.length; i++) {
+			if(tableau[i]>1) {
+				tableauPossibilite[i+1]=(i+1)*tableau[i];
+			}
+			if((tableau[i]==3)&&(tableauVerification[i]==-1)) {
+				tableauPossibilite[Constantes.BRELAN]=(i+1)*tableau[i];
+
+			}
+			if((tableau[i]==4)&&(tableauVerification[i]==-1)) {
+				tableauPossibilite[Constantes.CARRE]=(i+1)*tableau[i];
+
+			}
+			if((tableau[i]==5)&&(tableauVerification[i]==-1)) {
+				tableauPossibilite[Constantes.YUM]=30;
+			}
+		}
+
+		if((res.get("suite5")==true)&&(tableauVerification[Constantes.GROSSE_SUITE]==-1)) {
+			tableauPossibilite[Constantes.GROSSE_SUITE]=20;
+		}
+		if((res.get("suite4")==true)&&(tableauVerification[Constantes.PETITE_SUITE]==-1)) {
+			tableauPossibilite[Constantes.PETITE_SUITE]=15;
+		}
+		if((main==true)&&(tableauVerification[Constantes.MAIN_PLEINE]==-1)){
+			tableauPossibilite[Constantes.MAIN_PLEINE]=25;
+		}
+		if((tableauVerification[Constantes.SURPLUS]==-1)) {
+			tableauPossibilite[Constantes.SURPLUS]= somme(tableauDes);
+		}
+
+
+
+		return tableauPossibilite;
+	}
+
+	/** Compte l'ocurrance de tout les nombres dans le tableau
+	 * 	@param tableauDes le tableau de des
+	 *	@return int[] qui indique a la position i-1 le nombre de fois ou i se repete
+	 * **/
+
+	private static int[] Occurrence(int[] tableauDes) {
+
+		int compteur=0;
+
+		int []tableauVerification= new int [6];
+		for (int i=1; i<tableauDes.length+2;i++) {
+			compteur=0;
+			for(int x=0; x< tableauDes.length; x++) {
+				if(i==tableauDes[x]) {
+					compteur++;
+				}
+			}
+			tableauVerification[i-1]=compteur;
+		}
+		return tableauVerification;
+
+	}
+
+	/** Calculer la somme des des
+	 * 	@param tab le tableau de des
+	 *	@return somme  la somme des des
+	 * **/
+	public static int somme( int [] tab ) {
+		int somme=0;
+		for ( int i=0; i<tab.length;i++) {
+			somme +=tab[i];
+		}
+		return somme;
+	}
+
+
+
+
+
+	/** Calculer la somme de la partie supérieur ou inferieur si une des cases de cette dérniere à été mise à jour
+	 * 	@param pos qui indiaue la position de la case a modifier
+	 *  @param score indiaue le score obtenu a cette case
+	 *  @param arrayFinal le tableau de score a modifier
+	 *	@return arrayFinal le tableau de score a modifier
+	 * **/
+
+	public static int[] updateArrayScore(int pos, int score, int[] arrayFinal){
+
+		arrayFinal[pos] = score;
+
+		if(1<pos && pos<7){
+			int sommePartieSup =0;;
+			for(int i =1; i<Constantes.SOUS_TOTAL_HAUT;i++){
+				sommePartieSup += arrayFinal[i];
+			}
+
+			arrayFinal[Constantes.SOUS_TOTAL_HAUT] = sommePartieSup;
+		}
+		else if (9<pos && pos> 17) {
+			int sommePartieinf =0;;
+			for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
+				sommePartieinf += arrayFinal[i];
+			}
+
+			arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
+		}
+
+
+		return arrayFinal;
+	}
+
+	/** Calculer la somme de la partie supérieur et rajouter une bonification si ce dérnier est supérieur à 63 et calcule ensuite le score final
+
+	 *  @param arrayFinal le tableau de score a modifier
+	 *	@return arrayFinal le tableau de score apres les calculs
+	 * **/
+
+	public static int[] calculScoreFinal(int[] arrayFinal)
+	{
+		arrayFinal[Constantes.BONUS_DU_HAUT] = (arrayFinal[Constantes.SOUS_TOTAL_HAUT]>=63)? 25 : 0;
+		arrayFinal[Constantes.TOTAL_HAUT] =  arrayFinal[Constantes.SOUS_TOTAL_HAUT] +  arrayFinal[Constantes.BONUS_DU_HAUT];
+
+		int sommePartieinf =0;;
+		for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
+			sommePartieinf += arrayFinal[i];
+		}
+
+		arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
+
+		arrayFinal[Constantes.GRAND_TOTAL] = arrayFinal[Constantes.TOTAL_BAS] + arrayFinal[Constantes.TOTAL_HAUT];
+
+		return arrayFinal;
 	}
 
 }
