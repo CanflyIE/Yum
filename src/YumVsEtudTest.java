@@ -15,5 +15,13 @@ public class YumVsEtudTest {
         Assertions.assertFalse(YumVsEtud.isSuite(tab3).get("suite5"));
     }
 
+    @Test
+    public void test_isMainPleine() {
+        int[] tab1 = {3, 2, 3, 2, 3};
+        int[] tab2 = {3, 2, 3, 3, 3};
+        Assertions.assertTrue(YumVsEtud.isMainPleine(tab1));
+        Assertions.assertFalse(YumVsEtud.isMainPleine(tab2));
+    }
+
 
 }
