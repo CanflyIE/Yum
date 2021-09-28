@@ -21,7 +21,7 @@ import java.util.Scanner;
  *          
  * Auteur : Thomas Saudemont
  * Auteur : Aicha Fadia
- * Auteur : Ilyes
+ * Auteur : Ilyes Essid
  *
  * 
  * Auteur : Pierre B�lisle
@@ -112,6 +112,7 @@ public class YumVsEtud {
 	 * @return true si l'array a des doublons, sinon false
 	 */
 	public static boolean tableADoublons(int[] array) {
+		Arrays.sort(array);
 		for (int i=1; i<array.length; i++)
 			if (array[i-1] == array[i])
 				return true;
