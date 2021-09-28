@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/Constantes.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/Fonctions/GrillePossibilite.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/ModAffichage.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/YumVsEtud.java" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />

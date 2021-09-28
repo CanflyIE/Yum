@@ -22,10 +22,11 @@ public class Suite {
      */
     public static Map<String, Boolean> isSuite(int[] array) {
         Map<String, Boolean> suites = new HashMap<String, Boolean>();
-        Arrays.sort(array);
+        int[] tmpArray = Arrays.copyOf(array, array.length);
+        Arrays.sort(tmpArray);
         int cpt = 0;
-        for (int i=1;i<array.length;i++)
-            if (array[i-1] + 1 == array[i])
+        for (int i=1;i<tmpArray.length;i++)
+            if (tmpArray[i-1] + 1 == tmpArray[i])
                 cpt++;
         if (cpt >= 3)
             suites.put("suite4", true);
