@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /*
@@ -172,6 +175,57 @@ public class YumVsEtud {
 			sc.nextLine();
 		}
 		return integer;
+	}
+
+	/**
+	 * Vérifie un array contient une main pleine. C'est-à-dire deux valeurs identiques et trois autres valeurs
+	 * identiques (une paire et un brelan).
+	 * @param array array à vérifier
+	 * @return true si array contient une main pleine, sinon false
+	 */
+	public static boolean isMainPleine(int[] array) {
+		boolean paire = false;
+		boolean brelan = false;
+
+		for (int n : array) {
+			int r = 0;
+			// On compte le nombre de récurrences de n
+			for (int k : array)
+				if (n == k)
+					r++;
+			if (r == 2)
+				paire = true;
+			else if (r == 3)
+				brelan = true;
+			if (paire && brelan)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Vérifie si un array contient une suite de quatre ou cinq integer.
+	 * @param array à vérifier
+	 * @return Map<String, Boolean> de longueur deux. Exemple si array contient une suite de quatre mais pas de suite
+	 * de cinq : {suite5=false, suite4=true}
+	 */
+	public static Map<String, Boolean> isSuite(int[] array) {
+		Map<String, Boolean> suites = new HashMap<String, Boolean>();
+		Arrays.sort(array);
+		int cpt = 0;
+		for (int i=1;i<array.length;i++)
+			if (array[i-1] + 1 == array[i])
+				cpt++;
+		if (cpt >= 3)
+			suites.put("suite4", true);
+		else
+			suites.put("suite4", false);
+		if (cpt == 4)
+			suites.put("suite5", true);
+		else
+			suites.put("suite5", false);
+
+		return suites;
 	}
 
 }
