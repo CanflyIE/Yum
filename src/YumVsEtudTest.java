@@ -88,7 +88,7 @@ public class YumVsEtudTest {
         int tabResultat[] = {0,0,0,0,12,0,12,0,0,0,12,0,25,0,0,24,0,0,0};
         Assertions.assertArrayEquals(tabResultat, YumVsEtud.TraitementDePossibilite(tab, tableauVerification));
     }
-    
+
     @Test
     public void test_Somme() {
         int tab []= {1,2,3,4,5};

@@ -313,11 +313,18 @@ public class YumVsEtud {
 
 
 	/**
+	 * la fonction permet de parcourir de verifier pour le
+	 * joueur tout les possibilites de faire des points avec la main
+	 * qu'il a. les choix sont parmis : Brelan/MainPleine/carre/
+	 * Yum/Petit_Suite-Grosse_Suite/Surplus.
+	 * @param tableauDes: la tableau des des qui nous permet de verifeir les
+	 * possibilite en fonction de ses valeurs.
+	 * @return: un tableauPossibilite qui comprend les valeurs au cases de chacune
+	 * des possibilite.
 	 *
-	 * @param tableauDes
-	 * @return
-	 * @author Aicha Berthe Ilyes Essid
+	 * @author Aicha Berthe & Ilyes Essid
 	 */
+
 	public static int  [] TraitementDePossibilite(int []tableauDes, int []tableauVerification ) {
 
 		boolean main =isMainPleine(tableauDes);
@@ -362,9 +369,11 @@ public class YumVsEtud {
 		return tableauPossibilite;
 	}
 
-	/** Compte l'ocurrance de tout les nombres dans le tableau
-	 * 	@param tableauDes le tableau de des
-	 *	@return int[] qui indique a la position i-1 le nombre de fois ou i se repete
+	/** Cette fonction compte d'ocurrance d'une donne dans le tableau de des.
+	 * 	@param tableauDes : tableau de des a verifier
+	 *	@return int tableau qui indique a la position (i-1),
+	 *  le nombre de fois ou la valeur i se repete
+	 *  @author Aïcha berthe &  Ilyes Essid
 	 * **/
 
 	public static int[] Occurrence(int[] tableauDes) {
@@ -383,10 +392,13 @@ public class YumVsEtud {
 
 	}
 
-	/** Calculer la somme des des
-	 * 	@param tab le tableau de des
-	 *	@return somme  la somme des des
-	 **/
+	/** Calculer la somme des elements qui sont dans le
+	 * tableau de des
+	 * 	@param tab le tableau d'element a compter
+	 *	@return somme : la somme de tout les elements qui etait dans le
+	 *tableau
+	 *@author Aïcha Berthe & Ilyes Essid
+	 * **/
 	public static int somme( int [] tab ) {
 		int somme=0;
 		for ( int i=0; i<tab.length;i++) {
