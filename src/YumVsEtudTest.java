@@ -10,13 +10,18 @@ public class YumVsEtudTest {
         int[] tab1 = {2, 1, 4, 3, 5};
         int[] tab2 = {2, 1, 4, 3, 6};
         int[] tab3 = {2, 2, 4, 3, 6};
+        int[] tab4 = {1, 2, 4, 5, 6};
+
         Assertions.assertTrue(YumVsEtud.isSuite(tab1).get("suite4"));
         Assertions.assertTrue(YumVsEtud.isSuite(tab1).get("suite5"));
         Assertions.assertTrue(YumVsEtud.isSuite(tab2).get("suite4"));
+        Assertions.assertFalse(YumVsEtud.isSuite(tab4).get("suite4"));
         Assertions.assertFalse(YumVsEtud.isSuite(tab2).get("suite5"));
         Assertions.assertFalse(YumVsEtud.isSuite(tab3).get("suite4"));
         Assertions.assertFalse(YumVsEtud.isSuite(tab3).get("suite5"));
         Assertions.assertArrayEquals(tab1, new int[]{2, 1, 4, 3, 5});
+
+
     }
 
     @Test
@@ -68,6 +73,24 @@ public class YumVsEtudTest {
         int integer = 12345;
         Assertions.assertArrayEquals(YumVsEtud.intToArray(integer), new int[]{5, 4, 3, 2, 1});
         Assertions.assertFalse(Arrays.equals(YumVsEtud.intToArray(integer), new int[]{5, 4, 3, 2, 2}));
+    }
+
+    @Test
+    public void test_verifieLeChoix(){
+        int[] tab1 = {0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0};
+        Assertions.assertTrue(YumVsEtud.verifieLeChoix(16,tab1));
+        Assertions.assertTrue(YumVsEtud.verifieLeChoix(5,tab1));
+        Assertions.assertFalse(YumVsEtud.verifieLeChoix(6,tab1));
+    }
+
+    @Test
+    public void test_TraitementDePossibilite(){
+        int[] tabDes = {1, 4, 5, 4, 6};
+        int[] feuilleDepointage = {0, -1, -1, -1, -1, -1, -1, 0, 0, 0, -1, -1, -1, -1, -1, 20, -1, 0, 0};
+        int[] tableauPossibilite = {0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+        Assertions.assertArrayEquals(tableauPossibilite, YumVsEtud.TraitementDePossibilite(tabDes,feuilleDepointage));
+
     }
 
 }

@@ -65,7 +65,7 @@ public class YumVsEtud {
 					ModAffichage.afficherDes(tableDes);
 					nbLancers++;
 				}
-
+				System.out.println(Arrays.toString(feuillePointage));
 				tablePointage =  TraitementDePossibilite(tableDes,feuillePointage);
 				ModAffichage.afficherGrillePossibilite(tablePointage);
 			}
@@ -93,6 +93,12 @@ public class YumVsEtud {
 			tableDes[i] = Constantes.DES_MIN + (int)(Math.random() * ((Constantes.NB_FACES - Constantes.DES_MIN) + 1));
 	}
 
+	/**
+	 * Verifie si le choix de coup de l'utilisateur est possible ou non .
+	 * @param choix le choix du joueur
+	 * @param tableauPossiblite tableau qui contient le coup possibles
+	 * @return un boolean qui indique si oui ou non le coup et possible
+	 */
 
 	public static boolean verifieLeChoix(int choix , int[] tableauPossiblite){
 
@@ -248,10 +254,14 @@ public class YumVsEtud {
 		int [] tempArray = Arrays.copyOf(array,array.length);
 		Arrays.sort(tempArray);
 		int cpt = 0;
-
-		for (int i=1;i<tempArray.length;i++)
-			if (tempArray[i-1] + 1 == tempArray[i])
+		boolean notSuite = false ;
+		for (int i=0;i<tempArray.length-1;i++)
+			if (tempArray[i] + 1 == tempArray[i+1])
 				cpt++;
+			else if (i == 1)
+				notSuite = true;
+
+	if(!notSuite) {
 		if (cpt >= 3)
 			suites.put("suite4", true);
 		else
@@ -260,7 +270,10 @@ public class YumVsEtud {
 			suites.put("suite5", true);
 		else
 			suites.put("suite5", false);
+	} else {
+		suites.put("suite4", false);
 
+	}
 		return suites;
 	}
 
@@ -283,18 +296,18 @@ public class YumVsEtud {
 
 		int []tableauPossibilite= new int [19];
 		for(int i=0; i<tableau.length; i++) {
-			if(tableau[i]>1) {
+			if(tableau[i]>1 && (tableauVerification[i+1]==-1) ) {
 				tableauPossibilite[i+1]=(i+1)*tableau[i];
 			}
-			if((tableau[i]==3)&&(tableauVerification[i]==-1)) {
+			if((tableau[i]==3)&&(tableauVerification[Constantes.BRELAN]==-1)) {
 				tableauPossibilite[Constantes.BRELAN]=(i+1)*tableau[i];
 
 			}
-			if((tableau[i]==4)&&(tableauVerification[i]==-1)) {
+			if((tableau[i]==4)&&(tableauVerification[Constantes.CARRE]==-1)) {
 				tableauPossibilite[Constantes.CARRE]=(i+1)*tableau[i];
 
 			}
-			if((tableau[i]==5)&&(tableauVerification[i]==-1)) {
+			if((tableau[i]==5)&&(tableauVerification[Constantes.YUM]==-1)) {
 				tableauPossibilite[Constantes.YUM]=30;
 			}
 		}
@@ -370,7 +383,8 @@ public class YumVsEtud {
 		if(1<pos && pos<7){
 			int sommePartieSup =0;;
 			for(int i =1; i<Constantes.SOUS_TOTAL_HAUT;i++){
-				sommePartieSup += arrayFinal[i];
+				if (arrayFinal[i] != -1)
+					sommePartieSup += arrayFinal[i];
 			}
 
 			arrayFinal[Constantes.SOUS_TOTAL_HAUT] = sommePartieSup;
@@ -378,6 +392,7 @@ public class YumVsEtud {
 		else if (9<pos && pos> 17) {
 			int sommePartieinf =0;;
 			for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
+				if (arrayFinal[i] != -1)
 				sommePartieinf += arrayFinal[i];
 			}
 
