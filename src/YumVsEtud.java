@@ -1,6 +1,3 @@
-import Fonctions.GrillePossibilite;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 /*
@@ -30,7 +27,6 @@ import java.util.*;
  */
 
 public class YumVsEtud {
-
 	
 	// Les constantes sont d�finies dans le module Constantes.java
 	// Si vous en ajoutez, fa�tes-le ici.
@@ -41,43 +37,68 @@ public class YumVsEtud {
 	public static void main(String[] args){
 
 		int[] tableDes  = new int[Constantes.NB_DES];
-		int[] tablePointage = new int[Constantes.NB_CASES];;
+		int[] tablePointage = new int[Constantes.NB_CASES];
 		int[] feuillePointage = {0,-1,-1,-1,-1,-1,-1,0,0,0,-1,-1,-1,-1,-1,-1,-1,0,0} ;
 
 
+		boolean quitter = false;
+		do {
+			feuillePointage = new int[]{0, -1, -1, -1, -1, -1, -1, 0, 0, 0, -1, -1, -1, -1, -1, -1, -1, 0, 0};
+			tablePointage = new int[Constantes.NB_CASES];
+			tableDes  = new int[Constantes.NB_DES];
 
-
-
-		// Boucle qui demande à l'utilisateur les dés qu'il souhaite relancer
-		for ( int nbTours=0; nbTours<Constantes.NB_TOURS; nbTours++ ) {
-			System.out.println("TOUR " + nbTours);
-			int nbLancers = 0;
-			initTableDes(tableDes); // Lance les dés une première fois
-			ModAffichage.afficherDes(tableDes);
-			// Le joueur a le droit à 3 lancers
-			while (nbLancers < 3) {
-
-				int[] tableDesARelancer = obtenirTableDesARelancer();
-				if (tableDesARelancer == null)
-					nbLancers = 4;
-				else {
-					tableDes = relancerDesChoisis(tableDes, tableDesARelancer);
-					ModAffichage.afficherDes(tableDes);
-					nbLancers++;
+			// Boucle qui demande à l'utilisateur les dés qu'il souhaite relancer
+			int nbTours=0;
+			while (feuillePointage[0] == 0 && nbTours<Constantes.NB_TOURS) {
+				System.out.println("TOUR " + nbTours);
+				int nbLancers = 0;
+				initTableDes(tableDes); // Lance les dés une première fois
+				ModAffichage.afficherDes(tableDes);
+				// Le joueur a le droit à 3 lancers
+				while (nbLancers < 3) {
+					int[] tableDesARelancer = obtenirTableDesARelancer();
+					if (tableDesARelancer == null)
+						nbLancers = 4;
+					else {
+						tableDes = relancerDesChoisis(tableDes, tableDesARelancer);
+						ModAffichage.afficherDes(tableDes);
+						nbLancers++;
+					}
+					tablePointage =  TraitementDePossibilite(tableDes,feuillePointage);
+					ModAffichage.afficherGrillePossibilite(tablePointage);
 				}
-				tablePointage =  TraitementDePossibilite(tableDes,feuillePointage);
-				ModAffichage.afficherGrillePossibilite(tablePointage);
+
+				// Choix de la feuille de pointage
+				int choix = -1;
+				while(!verifieLeChoix(choix ,tablePointage ).contains(choix)) {
+					if (verifieLeChoix(choix ,tablePointage ).isEmpty())
+						break;
+					choix = demanderInteger(sc, "(1,6) ou 10 = Brelan , 11 = carre , 12 = Main pleine , 13 = Petite , 14 = Grosse, 15 = surplus , 16 Yum ");
+					if (choix == 0) {
+						feuillePointage[0] = -1;
+						break;
+					}
+
+				}
+				// Pointage
+				if (choix != -1) {
+					feuillePointage = updateArrayScore(choix,tablePointage[choix],feuillePointage);
+					feuillePointage = calculScoreFinal(feuillePointage);
+				}
+
+				ModAffichage.afficherGrille(feuillePointage);
+				nbTours++;
 			}
-			int choix =0;
-			while(!verifieLeChoix(choix ,tablePointage )) {
-				 choix = demanderInteger(sc, "(1,6) ou 10 = Brelon , 11 = carre , 12 = Main pleine , 13 = Petite , 14 = Grosse, 15 = surplus , 16 Yum ");
-			}
-			feuillePointage = updateArrayScore(choix,tablePointage[choix],feuillePointage);
-			feuillePointage = calculScoreFinal(feuillePointage);
-			System.out.println("sdasd");
-			System.out.println(Arrays.toString(feuillePointage));
-			ModAffichage.afficherGrille(feuillePointage);
-		}
+
+			System.out.println("\n\n Voulez-vous recommencer ? (oui OU non)");
+			String rep = sc.next();
+
+			if (!rep.equals("oui"))
+				quitter = true;
+
+		} while(!quitter);
+
+
 
 	}
 
@@ -101,19 +122,16 @@ public class YumVsEtud {
 	 * @param tableauPossiblite tableau qui contient le coup possibles
 	 * @return un boolean qui indique si oui ou non le coup et possible
 	 */
-
-	public static boolean verifieLeChoix(int choix , int[] tableauPossiblite){
+	public static List<Integer> verifieLeChoix(int choix , int[] tableauPossiblite){
 
 		List<Integer> choixPossible = new ArrayList<>();
-
 		for (int i=0; i<tableauPossiblite.length;i++){
 			if (tableauPossiblite[i] !=0){
 				choixPossible.add(i);
 			}
 		}
 
-		return choixPossible.contains(choix) ;
-
+		return choixPossible ;
 	}
 
 
@@ -275,11 +293,10 @@ public class YumVsEtud {
 	} else {
 		suites.put("suite4", false);
 		suites.put("suite5", false);
-
-
 	}
-		return suites;
-	}
+
+	return suites;
+}
 
 
 
@@ -340,13 +357,11 @@ public class YumVsEtud {
 	 * **/
 
 	private static int[] Occurrence(int[] tableauDes) {
-
 		int compteur=0;
-
 		int []tableauVerification= new int [6];
 		for (int i=1; i<tableauDes.length+2;i++) {
 			compteur=0;
-			for(int x=0; x< tableauDes.length; x++) {
+			for (int x=0; x< tableauDes.length; x++) {
 				if(i==tableauDes[x]) {
 					compteur++;
 				}
@@ -360,7 +375,7 @@ public class YumVsEtud {
 	/** Calculer la somme des des
 	 * 	@param tab le tableau de des
 	 *	@return somme  la somme des des
-	 * **/
+	 **/
 	public static int somme( int [] tab ) {
 		int somme=0;
 		for ( int i=0; i<tab.length;i++) {
@@ -368,10 +383,6 @@ public class YumVsEtud {
 		}
 		return somme;
 	}
-
-
-
-
 
 	/** Calculer la somme de la partie supérieur ou inferieur si une des cases de cette dérniere à été mise à jour
 	 * 	@param pos qui indiaue la position de la case a modifier
@@ -382,9 +393,10 @@ public class YumVsEtud {
 
 	public static int[] updateArrayScore(int pos, int score, int[] arrayFinal){
 
-		arrayFinal[pos] = score;
+		if (pos != 0)
+			arrayFinal[pos] = score;
 
-		if(1<pos && pos<7){
+		if (1<pos && pos<7){
 			int sommePartieSup =0;;
 			for(int i =1; i<Constantes.SOUS_TOTAL_HAUT;i++){
 				if (arrayFinal[i] != -1)
@@ -393,13 +405,13 @@ public class YumVsEtud {
 
 			arrayFinal[Constantes.SOUS_TOTAL_HAUT] = sommePartieSup;
 		}
-			int sommePartieinf =0;;
-			for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
-				if (arrayFinal[i] != -1)
-				sommePartieinf += arrayFinal[i];
+		int sommePartieinf =0;;
+		for (int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
+			if (arrayFinal[i] != -1)
+			sommePartieinf += arrayFinal[i];
 
 
-			arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
+		arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
 		}
 
 
@@ -407,11 +419,10 @@ public class YumVsEtud {
 	}
 
 	/** Calculer la somme de la partie supérieur et rajouter une bonification si ce dérnier est supérieur à 63 et calcule ensuite le score final
-
 	 *  @param arrayFinal le tableau de score a modifier
 	 *	@return arrayFinal le tableau de score apres les calculs
-	 * **/
-
+	 *
+	 **/
 	public static int[] calculScoreFinal(int[] arrayFinal)
 	{
 		arrayFinal[Constantes.BONUS_DU_HAUT] = (arrayFinal[Constantes.SOUS_TOTAL_HAUT]>=63)? 25 : 0;

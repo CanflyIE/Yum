@@ -78,9 +78,7 @@ public class YumVsEtudTest {
     @Test
     public void test_verifieLeChoix(){
         int[] tab1 = {0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0};
-        Assertions.assertTrue(YumVsEtud.verifieLeChoix(16,tab1));
-        Assertions.assertTrue(YumVsEtud.verifieLeChoix(5,tab1));
-        Assertions.assertFalse(YumVsEtud.verifieLeChoix(6,tab1));
+
     }
 
     @Test
