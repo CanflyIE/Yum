@@ -65,7 +65,6 @@ public class YumVsEtud {
 					ModAffichage.afficherDes(tableDes);
 					nbLancers++;
 				}
-				System.out.println(Arrays.toString(feuillePointage));
 				tablePointage =  TraitementDePossibilite(tableDes,feuillePointage);
 				ModAffichage.afficherGrillePossibilite(tablePointage);
 			}
@@ -74,6 +73,9 @@ public class YumVsEtud {
 				 choix = demanderInteger(sc, "(1,6) ou 10 = Brelon , 11 = carre , 12 = Main pleine , 13 = Petite , 14 = Grosse, 15 = surplus , 16 Yum ");
 			}
 			feuillePointage = updateArrayScore(choix,tablePointage[choix],feuillePointage);
+			feuillePointage = calculScoreFinal(feuillePointage);
+			System.out.println("sdasd");
+			System.out.println(Arrays.toString(feuillePointage));
 			ModAffichage.afficherGrille(feuillePointage);
 		}
 
@@ -272,6 +274,8 @@ public class YumVsEtud {
 			suites.put("suite5", false);
 	} else {
 		suites.put("suite4", false);
+		suites.put("suite5", false);
+
 
 	}
 		return suites;
@@ -389,12 +393,11 @@ public class YumVsEtud {
 
 			arrayFinal[Constantes.SOUS_TOTAL_HAUT] = sommePartieSup;
 		}
-		else if (9<pos && pos> 17) {
 			int sommePartieinf =0;;
 			for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
 				if (arrayFinal[i] != -1)
 				sommePartieinf += arrayFinal[i];
-			}
+
 
 			arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
 		}
@@ -414,12 +417,6 @@ public class YumVsEtud {
 		arrayFinal[Constantes.BONUS_DU_HAUT] = (arrayFinal[Constantes.SOUS_TOTAL_HAUT]>=63)? 25 : 0;
 		arrayFinal[Constantes.TOTAL_HAUT] =  arrayFinal[Constantes.SOUS_TOTAL_HAUT] +  arrayFinal[Constantes.BONUS_DU_HAUT];
 
-		int sommePartieinf =0;;
-		for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
-			sommePartieinf += arrayFinal[i];
-		}
-
-		arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
 
 		arrayFinal[Constantes.GRAND_TOTAL] = arrayFinal[Constantes.TOTAL_BAS] + arrayFinal[Constantes.TOTAL_HAUT];
 
