@@ -34,6 +34,10 @@ public class YumVsEtud {
 	// Permet la saisie de donnée au clavier en mode console.
 	public static Scanner sc = new Scanner(System.in);
 
+	/**
+	 * @author Thomas Saudemont
+	 * @author Ilyes Essid
+	 */
 	public static void main(String[] args){
 
 		int[] tableDes  = new int[Constantes.NB_DES];
@@ -70,8 +74,8 @@ public class YumVsEtud {
 
 				// Choix de la feuille de pointage
 				int choix = -1;
-				while(!verifieLeChoix(choix ,tablePointage ).contains(choix)) {
-					if (verifieLeChoix(choix ,tablePointage ).isEmpty())
+				while(!verifierLeChoix(choix ,tablePointage ).contains(choix)) {
+					if (verifierLeChoix(choix ,tablePointage ).isEmpty())
 						break;
 					choix = demanderInteger(sc, "(1,6) ou 10 = Brelan , 11 = carre , 12 = Main pleine , 13 = Petite , 14 = Grosse, 15 = surplus , 16 Yum ");
 					if (choix == 0) {
@@ -117,16 +121,16 @@ public class YumVsEtud {
 	}
 
 	/**
-	 * Verifie si le choix de coup de l'utilisateur est possible ou non .
+	 * Verifie si le choix de coup de l'utilisateur est possible ou non.
 	 * @param choix le choix du joueur
 	 * @param tableauPossiblite tableau qui contient le coup possibles
 	 * @return un boolean qui indique si oui ou non le coup et possible
 	 */
-	public static List<Integer> verifieLeChoix(int choix , int[] tableauPossiblite){
+	public static List<Integer> verifierLeChoix(int choix , int[] tableauPossiblite){
 
 		List<Integer> choixPossible = new ArrayList<>();
 		for (int i=0; i<tableauPossiblite.length;i++){
-			if (tableauPossiblite[i] !=0){
+			if (tableauPossiblite[i] != 0){
 				choixPossible.add(i);
 			}
 		}
@@ -137,7 +141,8 @@ public class YumVsEtud {
 
 	/**
 	 * Demande à l'utilisateur un integer dont chaque chiffre correspond à un dé qu'il souhaite relancer.
-	 * @return un array d'integer correspondant à l'integer entré par l'utilisateur (un chiffre par case de
+	 * @author Thomas Saudemont
+	 * * @return un array d'integer correspondant à l'integer entré par l'utilisateur (un chiffre par case de
 	 * l'array) OU null si l'utilisateur ne souhaite pas relancer de dé
 	 */
 	public static int[] obtenirTableDesARelancer( ){
@@ -163,6 +168,7 @@ public class YumVsEtud {
 
 	/**
 	 * Vérifie si un array contient plusieurs fois la même valeur.
+	 * @author Thomas Saudemont
 	 * @param array à vérifier
 	 * @return true si l'array a des doublons, sinon false
 	 */
@@ -179,6 +185,7 @@ public class YumVsEtud {
 
 	/**
 	 * 	Vérifie sur un array contient un int inférieur à un ou supérieur à cinq.
+	 * @author Thomas Saudemont
 	 * @param array array à vérifier
 	 * @return true si l'array possède une valeur interdite, sinon false
 	 */
@@ -191,6 +198,7 @@ public class YumVsEtud {
 
 	/**
 	 * Attribue, dans un array, une nouvelle valeur aléatoire aux indices spécifiés.
+	 * @author Thomas Saudemont
 	 * @param tableDes array à modifier avec de nouvelles valeurs
 	 * @param tableDesARelancer array contenant les indices de l'array à modifier
 	 * @return tableDes modifié
@@ -204,6 +212,7 @@ public class YumVsEtud {
 
 	/**
 	 * Convertit un integer en array (un chiffre par case).
+	 * @author Thomas Saudemont
 	 * @param integer integer à convertir en array
 	 * @return array
 	 */
@@ -221,6 +230,7 @@ public class YumVsEtud {
 
 	/**
 	 * Affiche un String puis récupère l'integer entré par l'utilisateur.
+	 * @author Thomas Saudemont
 	 * @param sc Scanner
 	 * @param message String à afficher à l'utilisateur
 	 * @return integer entré par l'utilisateur
@@ -238,6 +248,7 @@ public class YumVsEtud {
 
 	/**
 	 * Vérifie un array contient une main pleine. C'est-à-dire deux valeurs identiques et trois autres valeurs
+	 * @author Thomas Saudemont
 	 * identiques (une paire et un brelan).
 	 * @param array array à vérifier
 	 * @return true si array contient une main pleine, sinon false
@@ -264,6 +275,7 @@ public class YumVsEtud {
 
 	/**
 	 * Vérifie si un array contient une suite de quatre ou cinq integer.
+	 * @author Thomas Saudemont
 	 * @param array à vérifier
 	 * @return Map<String, Boolean> de longueur deux. Exemple si array contient une suite de quatre mais pas de suite
 	 * de cinq : {suite5=false, suite4=true}
@@ -306,7 +318,6 @@ public class YumVsEtud {
 	 * @return
 	 * @author Aicha Berthe Ilyes Essid
 	 */
-
 	public static int  [] TraitementDePossibilite(int []tableauDes, int []tableauVerification ) {
 
 		boolean main =isMainPleine(tableauDes);
@@ -356,7 +367,7 @@ public class YumVsEtud {
 	 *	@return int[] qui indique a la position i-1 le nombre de fois ou i se repete
 	 * **/
 
-	private static int[] Occurrence(int[] tableauDes) {
+	public static int[] Occurrence(int[] tableauDes) {
 		int compteur=0;
 		int []tableauVerification= new int [6];
 		for (int i=1; i<tableauDes.length+2;i++) {

@@ -82,13 +82,24 @@ public class YumVsEtudTest {
     }
 
     @Test
-    public void test_TraitementDePossibilite(){
-        int[] tabDes = {1, 4, 5, 4, 6};
-        int[] feuilleDepointage = {0, -1, -1, -1, -1, -1, -1, 0, 0, 0, -1, -1, -1, -1, -1, 20, -1, 0, 0};
-        int[] tableauPossibilite = {0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public void test_TraitementDePossibilite() {
+        int tab []= {4,6,4,4,6};
+        int [] tableauVerification = {0,-1,-1,-1,-1,-1,-1,0,0,0,-1,-1,-1,-1,-1,-1,-1,0,0};
+        int tabResultat[] = {0,0,0,0,12,0,12,0,0,0,12,0,25,0,0,24,0,0,0};
+        Assertions.assertArrayEquals(tabResultat, YumVsEtud.TraitementDePossibilite(tab, tableauVerification));
+    }
+    
+    @Test
+    public void test_Somme() {
+        int tab []= {1,2,3,4,5};
+        Assertions.assertEquals(15,YumVsEtud.somme(tab));
+    }
 
-        Assertions.assertArrayEquals(tableauPossibilite, YumVsEtud.TraitementDePossibilite(tabDes,feuilleDepointage));
-
+    @Test
+    public void test_Occurence() {
+        int tab []= {1,1,3,4,5};
+        int tabResultat []= {2,0,1,1,1,0};
+        Assertions.assertArrayEquals(tabResultat,YumVsEtud.Occurrence(tab));
     }
 
 }
