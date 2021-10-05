@@ -58,6 +58,8 @@ public class YumVsEtud {
 				int nbLancers = 0;
 				initTableDes(tableDes); // Lance les dés une première fois
 				ModAffichage.afficherDes(tableDes);
+				tablePointage =  TraitementDePossibilite(tableDes,feuillePointage);
+				ModAffichage.afficherGrillePossibilite(tablePointage);
 				// Le joueur a le droit à 3 lancers
 				while (nbLancers < 3) {
 					int[] tableDesARelancer = obtenirTableDesARelancer();
@@ -74,8 +76,8 @@ public class YumVsEtud {
 
 				// Choix de la feuille de pointage
 				int choix = -1;
-				while(!verifierLeChoix(tablePointage ).contains(choix)) {
-					if (verifierLeChoix(tablePointage ).isEmpty())
+				while(!choixPossible(tablePointage ).contains(choix)) {
+					if (choixPossible(tablePointage ).isEmpty())
 						break;
 					choix = demanderInteger(sc, "(1,6) ou 10 = Brelan , 11 = carre , 12 = Main pleine , 13 = Petite , 14 = Grosse, 15 = surplus , 16 Yum ");
 					if (choix == 0) {
@@ -91,7 +93,6 @@ public class YumVsEtud {
 				}
 
 				ModAffichage.afficherGrille(feuillePointage);
-				System.out.println(Arrays.toString(feuillePointage));
 				nbTours++;
 			}
 
@@ -121,12 +122,12 @@ public class YumVsEtud {
 	}
 
 	/**
-	 * Vérifie si le choix de coup de l'utilisateur est possible ou non.
+	 * Donner tout les choix possible a l'utilisateur
 	 * @Author Ilyes Essid
 	 * @param tableauPossiblite tableau qui contient le coup possibles
-	 * @return un boolean qui indique si oui ou non le coup et possible
+	 * @return une List qui contient les choix possible
 	 */
-	public static List<Integer> verifierLeChoix( int[] tableauPossiblite){
+	public static List<Integer> choixPossible( int[] tableauPossiblite){
 
 		List<Integer> choixPossible = new ArrayList<>();
 		for (int i=0; i<tableauPossiblite.length;i++){

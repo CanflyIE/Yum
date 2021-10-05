@@ -80,10 +80,10 @@ public class YumVsEtudTest {
     public void test_verifieLeChoix(){
         int[] tab1 = {0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0};
         List<Integer> tabResultat = Arrays.asList(3,10);
-        Assertions.assertEquals(tabResultat, YumVsEtud.verifierLeChoix(tab1));
+        Assertions.assertEquals(tabResultat, YumVsEtud.choixPossible(tab1));
 
         int[] tab2 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        Assertions.assertTrue( YumVsEtud.verifierLeChoix(tab2).isEmpty());
+        Assertions.assertTrue( YumVsEtud.choixPossible(tab2).isEmpty());
 
     }
 
