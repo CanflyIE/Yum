@@ -74,8 +74,8 @@ public class YumVsEtud {
 
 				// Choix de la feuille de pointage
 				int choix = -1;
-				while(!verifierLeChoix(choix ,tablePointage ).contains(choix)) {
-					if (verifierLeChoix(choix ,tablePointage ).isEmpty())
+				while(!verifierLeChoix(tablePointage ).contains(choix)) {
+					if (verifierLeChoix(tablePointage ).isEmpty())
 						break;
 					choix = demanderInteger(sc, "(1,6) ou 10 = Brelan , 11 = carre , 12 = Main pleine , 13 = Petite , 14 = Grosse, 15 = surplus , 16 Yum ");
 					if (choix == 0) {
@@ -91,6 +91,7 @@ public class YumVsEtud {
 				}
 
 				ModAffichage.afficherGrille(feuillePointage);
+				System.out.println(Arrays.toString(feuillePointage));
 				nbTours++;
 			}
 
@@ -122,11 +123,11 @@ public class YumVsEtud {
 
 	/**
 	 * Verifie si le choix de coup de l'utilisateur est possible ou non.
-	 * @param choix le choix du joueur
+	 * @Author Ilyes Essid
 	 * @param tableauPossiblite tableau qui contient le coup possibles
 	 * @return un boolean qui indique si oui ou non le coup et possible
 	 */
-	public static List<Integer> verifierLeChoix(int choix , int[] tableauPossiblite){
+	public static List<Integer> verifierLeChoix( int[] tableauPossiblite){
 
 		List<Integer> choixPossible = new ArrayList<>();
 		for (int i=0; i<tableauPossiblite.length;i++){
@@ -407,7 +408,8 @@ public class YumVsEtud {
 		return somme;
 	}
 
-	/** Calculer la somme de la partie supérieur ou inferieur si une des cases de cette dérniere à été mise à jour
+	/** Calculer la somme de la partie supérieur / inferieur si une des cases de cette dérniere à été mise à jour
+	 *  @author Ilyes Essid
 	 * 	@param pos qui indiaue la position de la case a modifier
 	 *  @param score indiaue le score obtenu a cette case
 	 *  @param arrayFinal le tableau de score a modifier
@@ -419,22 +421,30 @@ public class YumVsEtud {
 		if (pos != 0)
 			arrayFinal[pos] = score;
 
-		if (1<pos && pos<7){
-			int sommePartieSup =0;;
+		if (0<pos && pos<7){
+			int sommePartieSup =0;
+
 			for(int i =1; i<Constantes.SOUS_TOTAL_HAUT;i++){
 				if (arrayFinal[i] != -1)
 					sommePartieSup += arrayFinal[i];
 			}
-
 			arrayFinal[Constantes.SOUS_TOTAL_HAUT] = sommePartieSup;
+
 		}
-		int sommePartieinf =0;;
-		for (int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
-			if (arrayFinal[i] != -1)
-			sommePartieinf += arrayFinal[i];
 
 
-		arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
+		if (Constantes.BRELAN<=pos && pos<Constantes.GRAND_TOTAL) {
+			int sommePartieinf =0;;
+
+			for (int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
+				if (arrayFinal[i] != -1)
+					sommePartieinf += arrayFinal[i];
+				arrayFinal[Constantes.TOTAL_BAS] = sommePartieinf;
+
+			}
+
+
+
 		}
 
 
@@ -444,7 +454,7 @@ public class YumVsEtud {
 	/** Calculer la somme de la partie supérieur et rajouter une bonification si ce dérnier est supérieur à 63 et calcule ensuite le score final
 	 *  @param arrayFinal le tableau de score a modifier
 	 *	@return arrayFinal le tableau de score apres les calculs
-	 *
+	 * @author Ilyes Essid
 	 **/
 	public static int[] calculScoreFinal(int[] arrayFinal)
 	{

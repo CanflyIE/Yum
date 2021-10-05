@@ -2,6 +2,7 @@
 import org.junit.jupiter.api.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class YumVsEtudTest {
 
@@ -77,9 +78,43 @@ public class YumVsEtudTest {
 
     @Test
     public void test_verifieLeChoix(){
-        int[] tab1 = {0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0};
+        int[] tab1 = {0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0};
+        List<Integer> tabResultat = Arrays.asList(3,10);
+        Assertions.assertEquals(tabResultat, YumVsEtud.verifierLeChoix(tab1));
+
+        int[] tab2 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        Assertions.assertTrue( YumVsEtud.verifierLeChoix(tab2).isEmpty());
 
     }
+
+    @Test
+    public void test_updateArrayScore(){
+        int[] tab1 = {0, -1, 4, -1, 8, -1, -1, 0, 0, 0, -1, -1, -1, 15, -1, -1, -1, 15, 0};
+        int pos = 1;
+        int score = 4;
+        int[] tabResultat = {0, 4, 4, -1, 8, -1, -1, 16, 0, 0, -1, -1, -1, 15, -1, -1, -1, 15, 0};
+        Assertions.assertArrayEquals(tabResultat, YumVsEtud.updateArrayScore(pos,score,tab1));
+
+        int[] tab2 = {0, 4, 4, -1, 8, -1, -1, 16, 0, 0, -1, -1, -1, 15, -1, -1, -1, 15, 0};
+        int posPartieSup = Constantes.YUM;
+        int scorePartieSup = 25;
+        int[] tabResultatPartieSup = {0, 4, 4, -1, 8, -1, -1, 16, 0, 0, -1, -1, -1, 15, -1, -1, 25, 40, 0};
+        Assertions.assertArrayEquals(tabResultatPartieSup, YumVsEtud.updateArrayScore(posPartieSup,scorePartieSup,tab2));
+
+    }
+
+    @Test
+    public void test_calculScoreFinal(){
+
+        int[] tab1 = {0, 4, 4, -1, 8, -1, -1, 16, 0, 0, -1, -1, -1, 15, -1, -1, -1, 15, 0};
+        int[] tabResultat = {0, 4, 4, -1, 8, -1, -1, 16, 0, 16, -1, -1, -1, 15, -1, -1, -1, 15, 31};
+        Assertions.assertArrayEquals(tabResultat, YumVsEtud.calculScoreFinal(tab1));
+
+        int[] tabAvecBonus = {0, 4, 4, -1, 8, 25, 30, 71, 0, 0, -1, -1, -1, 15, -1, -1, -1, 15, 0};
+        int[] tabResultatBonus = {0, 4, 4, -1, 8, 25, 30, 71, 25, 96, -1, -1, -1, 15, -1, -1, -1, 15, 111};
+        Assertions.assertArrayEquals(tabResultatBonus, YumVsEtud.calculScoreFinal(tabAvecBonus));
+    }
+
 
     @Test
     public void test_TraitementDePossibilite() {
