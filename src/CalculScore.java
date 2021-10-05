@@ -1,4 +1,4 @@
-public class calculScore {
+public class CalculScore {
 
         public int[] updateArrayScore(int pos , int score , int[] arrayFinal){
 
@@ -8,7 +8,7 @@ public class calculScore {
 
                 if(1<pos && pos<7){
                 int sommePartieSup =0;;
-                for(int i =1; i<Constantes.SOUS_TOTAL_HAUT;i++){
+                for(int i = 1; i< Constantes.SOUS_TOTAL_HAUT; i++){
                     sommePartieSup += arrayFinal[i];
                 }
 
@@ -19,7 +19,7 @@ public class calculScore {
 
                 else if (9<pos && pos> 17) {
                     int sommePartieinf =0;;
-                    for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
+                    for(int i = Constantes.BRELAN; i< Constantes.TOTAL_BAS; i++){
                         sommePartieinf += arrayFinal[i];
                     }
                     
@@ -43,7 +43,7 @@ public class calculScore {
             // Calculer la somme de la partie supérieur et rajouter une bonification si ce dérnier est supérieur à 63
 
                 int sommePartieinf =0;;
-                for(int i=Constantes.BRELAN; i<Constantes.TOTAL_BAS;i++){
+                for(int i = Constantes.BRELAN; i< Constantes.TOTAL_BAS; i++){
                     sommePartieinf += arrayFinal[i];
                 }
                 
